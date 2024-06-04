@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+  <!-- Jquery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style-admin.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <title>Survey Kepuasan Masyarakat Dinas Kependudukan dan Pencatatan Sipil Kota Semarang</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- Flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <!-- Modal Pop Up untuk Detail -->
+  <script>
+    $(document).ready(function () {
+      // Menambahkan event listener untuk baris tabel
+      $('tr.data-row').click(function () {
+        // Ambil data dari baris yang diklik
+        var layanan = $(this).find('td:eq(1)').text();
+        var kritik = $(this).find('td:eq(2)').text();
+        var saran = $(this).find('td:eq(3)').text();
+
+        // tes
+        var usia = $(this).find('.d-none').data('usia');
+        var jenis_kelamin = $(this).find('.d-none').data('jenis_kelamin');
+        var pendidikan = $(this).find('.d-none').data('pendidikan');
+        var pekerjaan = $(this).find('.d-none').data('pekerjaan');
+        var total_skor = $(this).find('.d-none').data('total_skor');
+        var tanggal_dibuat = $(this).find('.d-none').data('waktu_dibuat');
+
+        // Menetapkan nilai data ke dalam modal
+        $('#modalContent').html('<p><strong>Jenis Layanan : </strong>' + layanan + '</p>' +
+          '<p><strong>Kritik <tab> : </strong>' + kritik + '</p>' +
+          '<p><strong>Saran : </strong>' + saran + '</p> <hr>' +
+          '<h5><strong>Biodata Responden</strong>' + '</h5>' +
+          '<p><strong>Jenis Kelamin : </strong>' + jenis_kelamin + '</p>' +
+          '<p><strong>Usia : </strong>' + usia + '</p>' +
+          '<p><strong>Pendidikan : </strong>' + pendidikan + '</p>' +
+          '<p><strong>Pekerjaan : </strong>' + pekerjaan + '</p>' +
+          '<p><strong>Skor : </strong>' + total_skor + '/100' + '</p>' +
+          '<p><strong>Waktu Dibuat (Tahun-Bulan-Tanggal) : </strong>' + tanggal_dibuat + '</p>'
+        );
+
+        // Tampilkan modal dengan efek fadeIn
+        $('#detailModal').fadeIn();
+      });
+
+      // Menutup modal saat tombol "Close" atau area di luar modal diklik
+      $('.close').click(function () {
+        $('#detailModal').css('display', 'none');
+      });
+
+      $(window).click(function (event) {
+        if (event.target == $('#detailModal')[0]) {
+          $('#detailModal').fadeOut();
+        }
+      });
+    });
+
+  </script>
+</head>
+
+<body>
+  <!-- ?Sidebar Section -->
+  <aside>
+    <!--  !Dark Mode & Profile (Jangan diapus) -->
+    <div class="right-section">
+      <!-- <div class="nav">
+        <button id="menu-btn">
+          <span class="material-icons-sharp">
+            menu
+          </span>
+        </button>
+        <div class="dark-mode">
+          <span class="material-icons-sharp active">
+            light_mode
+          </span>
+          <span class="material-icons-sharp">
+            dark_mode
+          </span>
+        </div>
+
+        <div class="profile">
+          <div class="info">
+            <p style="margin: 0;">Hey, <b>Reza</b></p>
+            <small class="text-muted">Admin</small>
+          </div>
+          <div class="profile-photo">
+            <img src="/static/images/profile-dummy.png">
+          </div>
+        </div>
+
+      </div> -->
+      <!-- End of Nav -->
+    </div>
+
+    <div class="sidebar">
+      <a href="{{ url_for('admin') }}">
+        <span> <img src="/static/images/LOGOCAPIL2.png" alt="" style="width: 1.5rem;"> </span>
+        <h3 style="margin-top:4px; font-size: 1.3rem; font-weight: 600;">ADMIN</h3>
+      </a>
+      <a href="{{ url_for('admin') }}" class="active">
+        <span class="material-icons-sharp">
+          dashboard
+        </span>
+        <h3>Dashboard</h3>
+      </a>
+      <a href="{{ url_for('statistik_dashboard') }}">
+        <span class="material-icons-sharp">
+          insights
+        </span>
+        <h3>Statistik</h3>
+      </a>
+      <a href="{{ url_for('form') }}">
+        <span class="material-icons-sharp">
+          receipt_long
+        </span>
+        <h3>Edit Form</h3>
+      </a>
+      <a href="{{ url_for('home') }}">
+        <span class="material-icons-sharp">
+          home
+        </span>
+        <h3>Home</h3>
+      </a>
+      <!-- <a href="#">
+        <span class="material-icons-sharp">
+          add
+        </span>
+        <h3>New Login</h3>
+      </a> -->
+      <a href="{{ url_for('sign_out') }}">
+        <span class="material-icons-sharp">
+          logout
+        </span>
+        <h3>Logout</h3>
+      </a>
+    </div>
+  </aside>
+  <!-- ?End of Sidebar Section -->
+  <!-- * Main Content -->
+  <div class="container">
+    <main>
+      <section class="home-section">
+        <div class="container">
+          <!-- <h3 class="judul-survey">Survey Kepuasan Dinas Kependudukan dan Pencatatan Sipil Kota Semarang</h3> -->
+          <div class="container-fluid py-1">
+            <!-- <h2>Dashboard</h2> -->
+            <!-- Dropdown Filter Jenis Layanan -->
+          </div>
+          <div class="filter-container">
+            <!-- <h6 style="font-size:medium; font-weight: 600;">Pilih Berdasarkan Jenis Layanan</h6> -->
+            <div class="d-flex justify-content-between">
+              <!-- Tombol filter (ujung kiri) -->
+              <select id="jenis_layanan">
+                <option value="all">Semua Layanan</option>
+                <option value="Akta Perkawinan">Akta Perkawinan</option>
+                <option value="Akta Kelahiran">Akta Kelahiran</option>
+                <option value="Akta Kematian">Akta Kematian</option>
+                <option value="KTP Elektronik">KTP Elektronik</option>
+                <option value="Kartu Keluarga (KK)">Kartu Keluarga (KK)</option>
+                <option value="Kartu Identitas Anak (KIA)">Kartu Identitas Anak (KIA)</option>
+              </select>
+
+              <div class="flatpickr-wrapper">
+                <form id="periodeForm" action="/periode" method="post"
+                  style="display: flex; align-items: flex-end; gap: 20px;">
+                  <div class="flatpickr-input-container">
+                    <!-- <label for="start_date">Tanggal Mulai:</label> -->
+                    <input type="text" id="start_date" name="start_date" class="flatpickr-input"
+                      placeholder="Tanggal Mulai">
+                  </div>
+
+                  <div class="flatpickr-input-container">
+                    <!-- <label for="end_date">Tanggal Berakhir:</label> -->
+                    <input type="text" id="end_date" name="end_date" class="flatpickr-input"
+                      placeholder="Tanggal Berakhir">
+                  </div>
+
+                  <button type="submit" class="submit-button">Cari</button>
+                </form>
+              </div>
+
+              <!-- !Tombol Excel (ujung kanan) -->
+              <div class="btn-group dropleft">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="padding: 8px; margin-bottom: 3px; border-radius: 6px;">
+                  <i style="font-size: large;" class='bx bx-export'></i> Excel
+                </button>
+                <div class="dropdown-menu" x-placement="bottom-start"
+                  style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                  <a class="dropdown-item" href="/export-excel?jenis_layanan=all">Semua Jenis Layanan</a>
+                  <a class="dropdown-item" href="/export-excel?jenis_layanan=Akta%20Perkawinan">Akta Perkawinan</a>
+                  <a class="dropdown-item" href="/export-excel?jenis_layanan=Akta%20Kelahiran">Akta Kelahiran</a>
+                  <a class="dropdown-item" href="/export-excel?jenis_layanan=Akta%20Kematian">Akta Kematian</a>
+                  <a class="dropdown-item" href="/export-excel?jenis_layanan=KTP%20Elektronik">KTP Elektronik</a>
+                  <a class="dropdown-item" href="/export-excel?jenis_layanan=Kartu%20Keluarga%20(KK)">Kartu Keluarga
+                    (KK)</a>
+                  <a class="dropdown-item" href="/export-excel?jenis_layanan=Kartu%20Identitas%20Anak%20(KIA)">Kartu
+                    Identitas Anak (KIA)</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- !Script Filter Jenis Layanan -->
+          <script type="text/javascript">
+            $(document).ready(function () {
+              $('#jenis_layanan').change(function () {
+                var selectedJenis = $(this).val();
+                $.ajax({
+                  url: '/admin-page',
+                  type: 'POST',
+                  data: { jenis_layanan: selectedJenis },
+                  success: function (response) {
+                    $('table').html(response); // Mengganti isi tabel dengan data yang diperbarui dari server
+                  },
+                  error: function (xhr, status, error) {
+                    console.log('Error:', error);
+                  }
+                });
+              });
+            });
+          </script>
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Jenis Layanan</th>
+                <th>Kritik</th>
+                <th>Saran</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              {% for data in datadiris %}
+              <tr class="data-row">
+                <td scope="row">{{ loop.index }}</td>
+                <td style="width: 40vh;">{{ data.layanan }}</td>
+                <td>{{ data.boxKritik }}</td>
+                <td>{{ data.boxSaran }}</td>
+                <td class="detail-cell">Detail</td>
+                <!-- Simpan data usia, pendidikan, dan pekerjaan dalam data attribute -->
+                <td class="d-none" data-usia="{{ data.usia }}" data-pendidikan="{{ data.pendidikan }}"
+                  data-pekerjaan="{{ data.pekerjaan }}" data-skor="{{ data.skor }}"
+                  data-jenis_kelamin="{{ data.jenis_kelamin }}" data-waktu_dibuat="{{ data.waktu_dibuat }}"
+                  data-total_skor="{{ data.total_skor }}"></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- Modal -->
+        <div id="detailModal" class="modal-detail">
+          <div class="modal-detail-content">
+            <div>
+              <span class="close">&times;</span>
+              <h4 style="font-weight: bold; padding-top: 10px;">Detail</h4>
+              <hr>
+            </div>
+            <div id="modalContent"></div>
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div aria-label="Page divigation example">
+          <ul class="pagination">
+            <li class="page-item" id="prevPage"><a class="page-link" style="margin-right: 5px; border-radius: 5px; "
+                href="#" onclick="prevPage()"><span aria-hidden="true">&laquo;</span></a></li>
+            <!-- Jumlah halaman akan ditambahkan secara dinamis di sini -->
+            <li class="page-item" id="pageNumber"></li>
+            <li class="page-item" id="nextPage"><a class="page-link" style="margin-left: 5px; border-radius: 5px;"
+                href="#" onclick="nextPage()"><span aria-hidden="true">&raquo;</span></a></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- * End of Main Content -->
+</body>
+
+<!-- Script of origin JS -->
+<script>
+  const sideMenu = document.querySelector('aside');
+  const menuBtn = document.getElementById('menu-btn');
+  const closeBtn = document.getElementById('close-btn');
+
+  const darkMode = document.querySelector('.dark-mode');
+
+  menuBtn.addEventListener('click', () => {
+    sideMenu.style.display = 'block';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    sideMenu.style.display = 'none';
+  });
+
+  darkMode.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode-variables');
+    darkMode.querySelector('span:nth-child(1)').classList.toggle('active');
+    darkMode.querySelector('span:nth-child(2)').classList.toggle('active');
+  })
+
+
+  Orders.forEach(order => {
+    const tr = document.createElement('tr');
+    const trContent = `
+      <td>${order.productName}</td>
+      <td>${order.productNumber}</td>
+      <td>${order.paymentStatus}</td>
+      <td class="${order.status === 'Declined' ? 'danger' : order.status === 'Pending' ? 'warning' : 'primary'}">${order.status}</td>
+      <td class="primary">Details</td>
+  `;
+    tr.innerHTML = trContent;
+    document.querySelector('table tbody').appendChild(tr);
+  });
+  // End of origin JS
+</script>
+
+<!-- Script of active sidebar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Mengambil semua tautan di dalam sidebar
+    const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+    // Menambahkan event listener untuk setiap tautan
+    sidebarLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        // Menghapus kelas active dari semua tautan
+        sidebarLinks.forEach(function (item) {
+          item.classList.remove('active');
+        });
+
+        // Menambahkan kelas active ke tautan yang diklik
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
+
+<!-- Script Pagination -->
+<script>
+  // Memanggil fungsi untuk menampilkan data awal
+  showPage(1);
+
+  // Fungsi untuk menampilkan data di halaman tertentu
+  function showPage(pageNum) {
+    var rows = $('tr.data-row');
+    var numPerPage = 10;
+    var totalPages = getTotalPages();
+
+    // Menyembunyikan semua baris data
+    rows.hide();
+
+    // Menampilkan baris data untuk halaman tertentu
+    var start = (pageNum - 1) * numPerPage;
+    var end = start + numPerPage;
+    rows.slice(start, end).show();
+
+    // Menampilkan nomor halaman
+    $('#pageNumber').empty();
+    for (var i = 1; i <= totalPages; i++) {
+      var pageLink = '<a class="page-link" href="#" onclick="showPage(' + i + ')">' + i + '</a>';
+      var pageItem = '<li class="page-item">' + pageLink + '</li>';
+      if (i === pageNum) {
+        pageItem = '<li class="page-item active">' + pageLink + '</li>';
+      }
+      $('#pageNumber').append(pageItem);
+    }
+  }
+
+  // Fungsi untuk menampilkan halaman sebelumnya
+  function prevPage() {
+    var currentPage = parseInt($('.page-item.active').text());
+    if (currentPage > 1) {
+      showPage(currentPage - 1);
+    }
+  }
+
+  // Fungsi untuk menampilkan halaman berikutnya
+  function nextPage() {
+    var currentPage = parseInt($('.page-item.active').text());
+    var totalPages = getTotalPages();
+    if (currentPage < totalPages) {
+      showPage(currentPage + 1);
+    }
+  }
+
+  // Fungsi untuk mendapatkan total halaman
+  function getTotalPages() {
+    var numRows = $('tr.data-row').length;
+    var numPerPage = 10;
+    return Math.ceil(numRows / numPerPage);
+  }
+</script>
+
+</html>

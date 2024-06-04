@@ -1,0 +1,331 @@
+* {
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+}
+
+body {
+  padding-top: 110px;
+}
+
+.top-image {
+  z-index: 100;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  background: rgb(210, 55, 55);
+  background: linear-gradient(90deg,
+      rgba(210, 55, 55, 1) 47%,
+      rgba(255, 85, 85, 1) 100%);
+  transition: top 0.5s ease;
+  /* Efek transisi perlahan */
+}
+
+.top-image.closed {
+  top: -120px;
+  /* Menyembunyikan elemen saat ditutup */
+}
+
+.top-image img {
+  margin: 15px 0;
+  max-height: 90px;
+  max-width: 85%;
+  margin-inline: 15vh;
+}
+
+.top-image img:nth-child(1) {
+  margin-right: auto;
+  /* Menggeser gambar ke kiri */
+}
+
+.top-image img:nth-child(2) {
+  margin-right: -10vh;
+}
+
+.top-image img:nth-child(3) {
+  margin-right: auto;
+  /* Menggeser gambar ke kanan */
+}
+
+.judul-survey {
+  margin-top: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ? Radio Button */
+/* Hide the default radio button */
+input[type="radio"] {
+  display: none;
+}
+
+/* Style the label to look like a radio button */
+input[type="radio"]+label {
+  display: inline-block;
+  cursor: pointer;
+  padding-left: 25px;
+  position: relative;
+}
+
+/* Style the radio button icon */
+input[type="radio"]+label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+/* Style the radio button icon when it's checked */
+input[type="radio"]:checked+label:before {
+  background-color: #000;
+}
+
+.container-fluid {
+  padding: 0px;
+}
+
+p {
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #080808;
+}
+
+.nama-pengguna {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* NAVBAR */
+.navbar {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: blur 1px #080808;
+  /* box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  padding-top: 17px;
+  background: rgb(210, 55, 55);
+  background: linear-gradient(90deg,
+      rgba(210, 55, 55, 1) 47%,
+      rgba(255, 85, 85, 1) 100%);
+}
+
+.nav-ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  /* Mengurangi jarak antara elemen navbar */
+  margin-right: 10vh;
+}
+
+.nav-ul a {
+  color: #f1ebeb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-ul a:hover {
+  opacity: 0;
+}
+
+#skor-container {
+  text-align: center;
+  /* background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  margin: 50px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#skor-container h2 {
+  font-size: 24px;
+  margin-bottom: 17px;
+}
+
+#score-circle {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+
+#score-circle #score-value {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#score-circle #score-of {
+  font-size: 16px;
+  position: absolute;
+  bottom: 10px;
+  margin-bottom: 6px;
+}
+
+#skor-container h3 {
+  font-size: 22px;
+  margin-top: 20px;
+}
+
+#score-description {
+  font-size: 15px;
+  margin-top: 25px;
+  color: #fefefe;
+}
+
+.btn-save {
+  display: inline-block;
+  background: linear-gradient(135deg, #945dca 0%, #2575fc 100%);
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  border-radius: 30px;
+  box-shadow: 0 5px 10px rgba(194, 194, 194, 0.458);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.btn-save:hover {
+  background: linear-gradient(135deg, #945dca 0%, #1f69e6 100%);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-save:active {
+  background: linear-gradient(135deg, #945dca 0%, #1f69e6 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn-success {
+  margin-top: 10px;
+  /* Jarak antara card dan tombol */
+  margin-left: 80vh;
+}
+
+/* Modal untuk Apakah Anda Sudah Yakin? */
+.modal {
+  /* display: none; */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  margin-top: 12px;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 30px;
+  border: 1px solid black;
+  width: 40%;
+  text-align: center;
+}
+
+.modal-content button {
+  margin-top: 12px;
+  background-color: #fefefe;
+  margin: 5px auto;
+  padding: 10px 20px;
+  border: 1px solid black;
+  width: 40%;
+  text-align: center;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  /* Smooth transition for background color */
+}
+
+/* Hover effect */
+.modal-content button:hover {
+  background-color: #080808;
+  /* Change background color on hover */
+  color: white;
+}
+
+/* * Kritik Saran * */
+/* Gaya untuk kotak input kritik dan saran */
+#kritik,
+#saran {
+  width: 100%;
+  font-size: 18px;
+  border: 1px solid #080808;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+/* Close button */
+.close {
+  color: #aaa;
+  float: right;
+  /* Tempatkan tombol close di kanan */
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #ff3232;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Footer */
+.footer {
+  background-color: white;
+  color: #333;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.footer .container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* List STyle Form Pertanyaan */
+ul,
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

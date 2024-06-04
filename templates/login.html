@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Font Awesome CSS -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet"> -->
+
+  <!-- Jquery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='login-style.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <title>Login - Survey Kepuasan Masyarakat Dinas Kependudukan dan Pencatatan Sipil Kota Semarang</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" />
+
+  <!-- !Login -->
+  <script>
+    // {% if msg %}
+    //     alert("{{ msg }}")
+    // {% endif %}
+    function sign_in() {
+      let username = $("#input-username").val();
+      let password = $("#input-password").val();
+
+      if (username === "") {
+        $("#help-id-login").text("Please input your id.");
+        $("#input-username").focus();
+        return;
+      } else {
+        $("#help-id-login").text("");
+      }
+
+      if (password === "") {
+        $("#help-password-login").text("Please input your password.");
+        $("#input-password").focus();
+        return;
+      } else {
+        $("#help-password-login").text("");
+      }
+
+      console.log(username, password);
+      $.ajax({
+        type: "POST",
+        url: "/sign_in",
+        data: {
+          username_give: username,
+          password_give: password,
+        },
+        success: function (response) {
+          if (response["result"] === "success") {
+            document.cookie = "mytoken=" + response["token"] + "; path=/";
+            window.location.replace("/admin-page");
+          } else {
+            alert(response["msg"]);
+          }
+        },
+      });
+    }
+
+    // for is hidden, with bulma class="is-hidden"
+    function toggle_sign_up() {
+      $("#sign-up-box").toggleClass("is-hidden");
+      $("#div-sign-in-or-up").toggleClass("is-hidden");
+      $("#btn-check-dup").toggleClass("is-hidden");
+      $("#help-id").toggleClass("is-hidden");
+      $("#help-password").toggleClass("is-hidden");
+      $("#help-password2").toggleClass("is-hidden");
+    }
+    function is_nickname(asValue) {
+      var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{5,10}$/;
+      return regExp.test(asValue);
+    }
+
+    function is_password(asValue) {
+      var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/;
+      return regExp.test(asValue);
+    }
+
+    // Please check your password. For your password, 
+    // please enter 8-20 English characters, numbers, or the following special characters (!@#$%^&*)
+    // function is_password(asValue) {
+    //   var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+    //   return regExp.test(asValue);
+    // }
+
+    function check_dup() {
+      let username = $("#input-username").val();
+      console.log(username);
+      if (username === "") {
+        $("#help-id")
+          .text("Enter in your id")
+          .removeClass("is-safe")
+          .addClass("is-danger");
+        $("#input-username").focus();
+        return;
+      }
+      if (!is_nickname(username)) {
+        $("#help-id")
+          .text(
+            "Mohon cek kembali. Untuk Username harus terdiri dari 5 sampai 10 karakter, yang terdiri dari huruf alfabet (baik huruf besar maupun kecil) dan juga angka."
+          )
+          .removeClass("is-safe")
+          .addClass("is-danger");
+        $("#input-username").focus();
+        return;
+      }
+      $("#help-id").addClass("is-loading");
+      $.ajax({
+        type: "POST",
+        url: "/sign_up/check_dup",
+        data: {
+          username_give: username,
+        },
+        success: function (response) {
+          console.log(response);
+          if (response["exists"]) {
+            $("#help-id")
+              .text("Username ini sudah dipakai")
+              .removeClass("is-safe")
+              .addClass("is-danger");
+            $("#input-username").focus();
+          } else {
+            $("#help-id")
+              .text("Usename ini dapat digunakan")
+              .removeClass("is-danger")
+              .addClass("is-success");
+          }
+          $("#help-id").removeClass("is-loading");
+        },
+      });
+    }
+    function sign_up() {
+      let username = $("#input-username").val();
+      let password = $("#input-password").val();
+      let password2 = $("#input-password2").val();
+      console.log(username, password, password2);
+      console.log($("#help-id").attr("class"));
+
+      if ($("#help-id").hasClass("is-danger")) {
+        alert("Please check your id");
+        return;
+      } else if (!$("#help-id").hasClass("is-success")) {
+        alert("Please double check your id");
+        return;
+      }
+
+      if (password === "") {
+        $("#help-password")
+          .text("Please enter your password")
+          .removeClass("is-safe")
+          .addClass("is-danger");
+        $("#input-password").focus();
+        return;
+      } else if (!is_password(password)) {
+        $("#help-password")
+          .text(
+            "Mohon cek kembali. Untuk password harus terdiri dari 8 sampai 20 karakter, yang terdiri dari setidaknya satu digit dan setidaknya satu huruf alfabet (baik huruf besar maupun kecil)."
+          )
+          .removeClass("is-safe")
+          .addClass("is-danger");
+        $("#input-password").focus();
+        return;
+      } else {
+        $("#help-password")
+          .text("This password can be used!")
+          .removeClass("is-danger")
+          .addClass("is-success");
+      }
+      if (password2 === "") {
+        $("#help-password2")
+          .text("Please enter your password")
+          .removeClass("is-safe")
+          .addClass("is-danger");
+        $("#input-password2").focus();
+        return;
+      } else if (password2 !== password) {
+        $("#help-password2")
+          .text("Your passwords do not match")
+          .removeClass("is-safe")
+          .addClass("is-danger");
+        $("#input-password2").focus();
+        return;
+      } else {
+        $("#help-password2")
+          .text("Your passwords match!!!")
+          .removeClass("is-danger")
+          .addClass("is-success");
+      }
+      $.ajax({
+        type: "POST",
+        url: "/sign_up/save",
+        data: {
+          username_give: username,
+          password_give: password,
+        },
+        success: function (response) {
+          alert("Bagus! Akun Anda berhasil terdaftar!");
+          window.location.replace("/login");
+        },
+      });
+    }
+
+    function clearInputs() {
+      $("#input-username").val("");
+      $("#input-password").val("");
+      $("#input-password2").val("");
+    }
+  </script>
+</head>
+
+<body>
+  <section class="section">
+    <div class="container-login" style="margin-top: 6vh;">
+      <div class="box" style="max-width: 480px; margin: auto">
+        <article class="media">
+          <div class="media-content">
+            <!-- ?Logo Login -->
+            <div class="image-logo-login">
+              <div class="image-login">
+                <img src="/static/images/LOGOCAPIL2.png" alt="">
+              </div>
+              <div class="logo-login">
+                <strong style="color: #000;">LOGIN ADMIN (SKM)</strong>
+                <br>Dinas Kependuduk dan Pencatatan Sipil Kota Semarang
+              </div>
+            </div>
+            <div class="content">
+              <!-- !Uname -->
+              <div class="field has-addons">
+                <div class="control has-icons-left" style="width: 100%">
+                  <input id="input-username" class="input" type="text" placeholder="Username" />
+                  <span class="icon is-small is-left"><i class="fa fa-user" style="color: #e8344e"></i></span>
+                </div>
+                <!-- *hidden -->
+                <div id="btn-check-dup" class="control is-hidden">
+                  <button class="button is-sparta" onclick="check_dup()">
+                    Check Username
+                  </button>
+                </div>
+              </div>
+              <!-- *hidden -->
+              <p id="help-id" class="help is-hidden">
+                Untuk Username harus terdiri dari 5 sampai 10 karakter, yang terdiri dari huruf alfabet (baik huruf
+                besar maupun kecil) dan juga angka.
+              </p>
+              <p id="help-id-login" class="help is-danger"></p>
+
+              <!-- !Password -->
+              <div class="field">
+                <div class="control has-icons-left">
+                  <input id="input-password" class="input" type="password" placeholder="Password" />
+                  <span class="icon is-small is-left"><i class="fa fa-lock" style="color: #e8344e"></i></span>
+                </div>
+                <p id="help-password" class="help is-hidden">
+                  Untuk password harus terdiri dari 8 sampai 20 karakter, yang terdiri dari setidaknya satu digit dan
+                  setidaknya satu huruf alfabet (baik huruf besar maupun kecil).
+                </p>
+              </div>
+            </div>
+            <!-- *hidden end* -->
+
+            <div id="div-sign-in-or-up" class="has-text-centered">
+              <nav class="level is-mobile">
+                <button class="level-item button is-sparta" onclick="sign_in()">
+                  Masuk
+                </button>
+                <button class="level-item button" style="border-color: rgb(0, 0, 0);" onclick="clearInputs()">
+                  Hapus
+                </button>
+              </nav>
+              <hr />
+              <h4 class="mb-3">Klik tombol Daftar di bawah untuk buat akun</h4>
+              <nav class="level is-mobile" style="display: inline-flex;">
+                <button class="level-item button is-sparta is-outlined" style="padding-inline: 10rem;" onclick="toggle_sign_up()">
+                  Daftar
+                </button>
+                <button class="level-item button is-sparta is-outlined" onclick="window.location.href='/'">
+                  <i class="fa fa-home"></i>
+                </button>                
+              </nav>
+            </div>
+
+            <!-- *hidden for sign up* -->
+            <div id="sign-up-box" class="is-hidden">
+              <div class="mb-5">
+                <div class="field">
+                  <div class="control has-icons-left" style="width: 100%">
+                    <input id="input-password2" class="input" type="password" placeholder="Konfirmasi Password Anda" />
+                    <span class="icon is-small is-left"><i class="fa fa-lock" style="color: #e8344e"></i></span>
+                  </div>
+                  <p id="help-password2" class="help is-hidden">
+                    Konfirmasi password
+                  </p>
+                </div>
+              </div>
+              <nav class="level is-mobile">
+                <button class="level-item button is-sparta" onclick="sign_up()">
+                  Daftar
+                </button>
+                <button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
+                  Batal
+                </button>
+                </button>
+                <button class="level-item button is-outlined" style="border-color: rgb(0, 0, 0);"
+                  onclick="clearInputs()">
+                  Hapus
+                </button>
+              </nav>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>

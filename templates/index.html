@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta property="og:title"
+    content="Website Survey Kepuasan Masyarakat Dinas Kependudukan dan Pencatatan Sipil Kota Semarang">
+  <meta property=" og:description"
+    content="Website Survey Kepuasan Masyarakat Dinas Kependudukan dan Pencatatan Sipil Kota Semarang made by ahnaf b arief" />
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <!-- Jquery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+  <script src="{{ url_for('static', filename='post.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Survey Kepuasan Masyarakat Dinas Kependudukan dan Pencatatan Sipil Kota Semarang</title>
+</head>
+
+<body>
+  {% include "header.html" %}
+
+  <!-- !Skor -->
+  <div id="skor-container" style="display: none;">
+    <h2>Hasil Skor Anda</h2>
+    <div id="score-circle">
+      <span id="score-value">76</span>
+      <span id="score-of">/ 100</span>
+    </div>
+    <p id="score-description">Terima kasih telah mengisi survey layanan kami!</p>
+    <button class="btn-save" id="saveBtn">Simpan</button>
+  </div>
+  <script>
+
+  </script>
+
+  <!-- !Modal Apakah Anda sudah yakin? -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <p>Apakah Anda sudah yakin?</p>
+      <button class="yes" id="yesBtn">YA</button>
+      <button class="tidak" id="noBtn">TIDAK</button>
+    </div>
+  </div>
+  <script>
+    // Mendapatkan tombol submit
+    var submitBtn = document.getElementById("submitBtn");
+
+    // Mendapatkan modal
+    var modal = document.getElementById("myModal");
+
+    // Mendapatkan tombol untuk menutup modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // Ketika tombol submit ditekan
+    submitBtn.onclick = function () {
+      modal.style.display = "block";
+    }
+
+    // Ketika pengguna mengklik (x), tutup modal
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // Ketika pengguna mengklik di luar area modal, tutup modal
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+
+  <div class="container">
+    <p class="judul-survey">KUESIONER SURVEI KEPUASAN MASYARAKAT (SKM) <br> PADA UNIT LAYANAN DINAS KEPENDUDUKAN DAN
+      PENCATATAN SIPIL KOTA SEMARANG</p>
+    <hr style="margin-inline: 25vh;">
+    <div class="mb-4 bg-light rounded-3 tampil-data"
+      style="border: 1px solid black; margin-top: 5vh; padding-inline: 2.5vh;">
+      <div class="container-fluid py-4">
+        <!-- ?Jenis Layanan -->
+        <h1 class="display-6 fw-bold">JENIS LAYANAN</h1>
+        <div class="mb-3">
+          {% for service in services %}
+          <input type="radio" class="form-check-input" id="layanan-{{ service.name }}" name="layanan_give"
+            value="{{ service.name }}" required>
+          <label class="form-check-label" for="layanan-{{ service.name }}">{{ service.name }}</label><br>
+          {% endfor %}
+        </div>
+        <hr>
+        <h1 class="display-6 fw-bold">PROFIL</h1>
+        <div class="mb-3">
+          <h5><strong>Jenis Kelamin</strong></h5>
+          {% for gender in genders %}
+          <input type="radio" class="form-check-input" id="jenis-kelamin-{{ gender._id }}" name="kelamin_give"
+            value="{{ gender.name }}">
+          <label class="form-check-label" for="jenis-kelamin-{{ gender._id }}">{{ gender.name }}</label>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          <h5><strong>Usia</strong></h5>
+          {% for age in ages %}
+          <input type="radio" class="form-check-input" id="usia-{{ age.range }}" name="usia_give"
+            value="{{ age.range }}">
+          <label class="form-check-label" for="usia-{{ age.range }}">{{ age.range }}</label><br>
+
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          <h5><strong>Pendidikan</strong></h5>
+          {% for pendidikan in pendidikans %}
+          <input type="radio" class="form-check-input" id="pendidikan-{{ pendidikan.name }}" name="pendidikan_give"
+            value="{{ pendidikan.name }}">
+          <label class="form-check-label" for="pendidikan-{{ pendidikan.name }}">{{ pendidikan.name }}</label><br>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          <h5><strong>Pekerjaan</strong></h5>
+          {% for pekerjaan in pekerjaans %}
+          <input type="radio" class="form-check-input" id="pekerjaan-{{ pekerjaan.name }}" name="pekerjaan_give"
+            value="{{ pekerjaan.name }}">
+          <label class="form-check-label" for="pekerjaan-{{ pekerjaan.name }}">{{ pekerjaan.name }}</label><br>
+          {% endfor %}
+          <input type="radio" class="form-check-input" id="pekerjaan-Lainnya" name="pekerjaan_give" value="Lainnya">
+          <label class="form-check-label" for="pekerjaan-Lainnya">Lainnya:</label>
+          <input type="text" id="pekerjaan-lainnya-input" name="pekerjaan_lainnya" class="custom-text" disabled
+            style="padding-left: 4px;">
+        </div>
+        <hr>
+        <h1 class="display-6 fw-bold">Form Pertanyaan</h1>
+        <div class="mb-3">
+          <ul>
+            {% for pertanyaan in pertanyaan %}
+            <li>
+              <strong>{{ loop.index }}. &nbsp;{{ pertanyaan.pertanyaan }}</strong><br>
+              <ul style="margin-bottom: 13px;">
+                <li>
+                  <input type="radio" class="pertanyaan_radio" name="{{ pertanyaan._id }}"
+                    id="{{ pertanyaan._id }}_pilihan1" value="{{ pertanyaan.nilai_pilihan1 }}">
+                  <label for="{{ pertanyaan._id }}_pilihan1">{{ pertanyaan.pilihan1 }} ({{ pertanyaan.nilai_pilihan1
+                    }})</label>
+                </li>
+                <li>
+                  <input type="radio" class="pertanyaan_radio" name="{{ pertanyaan._id }}"
+                    id="{{ pertanyaan._id }}_pilihan2" value="{{ pertanyaan.nilai_pilihan2 }}">
+                  <label for="{{ pertanyaan._id }}_pilihan2">{{ pertanyaan.pilihan2 }} ({{ pertanyaan.nilai_pilihan2
+                    }})</label>
+                </li>
+                <li>
+                  <input type="radio" class="pertanyaan_radio" name="{{ pertanyaan._id }}"
+                    id="{{ pertanyaan._id }}_pilihan3" value="{{ pertanyaan.nilai_pilihan3 }}">
+                  <label for="{{ pertanyaan._id }}_pilihan3">{{ pertanyaan.pilihan3 }} ({{ pertanyaan.nilai_pilihan3
+                    }})</label>
+                </li>
+                <li>
+                  <input type="radio" class="pertanyaan_radio" name="{{ pertanyaan._id }}"
+                    id="{{ pertanyaan._id }}_pilihan4" value="{{ pertanyaan.nilai_pilihan4 }}">
+                  <label for="{{ pertanyaan._id }}_pilihan4">{{ pertanyaan.pilihan4 }} ({{ pertanyaan.nilai_pilihan4
+                    }})</label>
+                </li>
+              </ul>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+
+        <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- <h1 class="display-6 fw-bold">Form Pertanyaan</h1>
+        <div class="mb-3">
+          <p>1. Bagaimana pendapat Saudara tentang kesesuaian persyaratan pelayanan dengan jenis pelayanannya?</p>
+          <input type="radio" class="form-check-input" id="tidak-sesuai" name="p1_give" value="Tidak Sesuai">
+          <label class="form-check-label" for="tidak-sesuai">Tidak Sesuai</label><br>
+
+          <input type="radio" class="form-check-input" id="kurang-sesuai" name="p1_give" value="Kurang Sesuai">
+          <label class="form-check-label" for="kurang-sesuai">Kurang Sesuai</label><br>
+
+          <input type="radio" class="form-check-input" id="sesuai" name="p1_give" value="Sesuai">
+          <label class="form-check-label" for="sesuai">Sesuai</label><br>
+
+          <input type="radio" class="form-check-input" id="sangat-sesuai" name="p1_give" value="Sangat Sesuai">
+          <label class="form-check-label" for="sangat-sesuai">Sangat Sesuai</label><br>
+
+          <br>
+          <p>2. Bagaimana pemahaman Saudara tentang kemudahan prosedur pelayanan di unit ini?</p>
+          <input type="radio" class="form-check-input" id="tidak-mudah" name="p2_give" value="Tidak Mudah">
+          <label class="form-check-label" for="tidak-mudah">Tidak mudah</label><br>
+
+          <input type="radio" class="form-check-input" id="kurang-mudah" name="p2_give" value="Kurang Mudah">
+          <label class="form-check-label" for="kurang-mudah">Kurang mudah</label><br>
+
+          <input type="radio" class="form-check-input" id="mudah" name="p2_give" value="Mudah">
+          <label class="form-check-label" for="mudah">Mudah</label><br>
+
+          <input type="radio" class="form-check-input" id="sangat-mudah" name="p2_give" value="Sangat Mudah">
+          <label class="form-check-label" for="sangat-mudah">Sangat mudah</label><br>
+
+          <br>
+          <p>3. Bagaimana pendapat Saudara tentang kecepatan waktu dalam memberikan layanan?</p>
+          <input type="radio" class="form-check-input" id="tidak-cepat" name="p3_give" value="Tidak Cepat">
+          <label class="form-check-label" for="tidak-cepat">Tidak cepat</label><br>
+
+          <input type="radio" class="form-check-input" id="kurang-cepat" name="p3_give" value="Kurang Cepat">
+          <label class="form-check-label" for="kurang-cepat">Kurang cepat</label><br>
+
+          <input type="radio" class="form-check-input" id="cepat" name="p3_give" value="Cepat">
+          <label class="form-check-label" for="cepat">Cepat</label><br>
+
+          <input type="radio" class="form-check-input" id="sangat-cepat" name="p3_give" value="Sangat Cepat">
+          <label class="form-check-label" for="sangat-cepat">Sangat cepat</label><br>
+
+          <br>
+          <p>4. Bagaimana pendapat Saudara tentang kewajaran biaya/tarif dalam pelayanan?</p>
+          <input type="radio" class="form-check-input" id="sangat-mahal" name="p4_give" value="Sangat Mahal">
+          <label class="form-check-label" for="sangat-mahal">Sangat Mahal</label><br>
+
+          <input type="radio" class="form-check-input" id="cukup-mahal" name="p4_give" value="Cukup Mahal">
+          <label class="form-check-label" for="cukup-mahal">Cukup Mahal</label><br>
+
+          <input type="radio" class="form-check-input" id="murah" name="p4_give" value="Murah">
+          <label class="form-check-label" for="murah">Murah</label><br>
+
+          <input type="radio" class="form-check-input" id="gratis" name="p4_give" value="Gratis">
+          <label class="form-check-label" for="gratis">Gratis</label><br>
+
+          <br>
+          <p>5. Bagaimana pendapat Saudara tentang kesesuaian produk pelayanan antara yang tercantum dalam standar
+            pelayanan dengan hasil yang diberikan?</p>
+          <input type="radio" class="form-check-input" id="tidak-sesuai-produk" name="p5_give" value="Tidak Sesuai">
+          <label class="form-check-label" for="tidak-sesuai-produk">Tidak Sesuai</label><br>
+
+          <input type="radio" class="form-check-input" id="kurang-sesuai-produk" name="p5_give" value="Kurang Sesuai">
+          <label class="form-check-label" for="kurang-sesuai-produk">Kurang Sesuai</label><br>
+
+          <input type="radio" class="form-check-input" id="sesuai-produk" name="p5_give" value="Sesuai">
+          <label class="form-check-label" for="sesuai-produk">Sesuai</label><br>
+
+          <input type="radio" class="form-check-input" id="sangat-sesuai-produk" name="p5_give" value="Sangat Sesuai">
+          <label class="form-check-label" for="sangat-sesuai-produk">Sangat Sesuai</label><br>
+
+          <br>
+          <p>6. Bagaimana pendapat Saudara tentang kompetensi kemampuan petugas dalam pelayanan?</p>
+          <input type="radio" class="form-check-input" id="tidak-kompeten" name="p6_give" value="Tidak Kompeten">
+          <label class="form-check-label" for="tidak-kompeten">Tidak Kompeten</label><br>
+
+          <input type="radio" class="form-check-input" id="kurang-kompeten" name="p6_give" value="Kurang Kompeten">
+          <label class="form-check-label" for="kurang-kompeten">Kurang Kompeten</label><br>
+
+          <input type="radio" class="form-check-input" id="kompeten" name="p6_give" value="Kompeten">
+          <label class="form-check-label" for="kompeten">Kompeten</label><br>
+
+          <input type="radio" class="form-check-input" id="sangat-kompeten" name="p6_give" value="Sangat Kompeten">
+          <label class="form-check-label" for="sangat-kompeten">Sangat Kompeten</label><br>
+
+          <br>
+          <p>7. Bagaimana pendapat Saudara perilaku petugas dalam pelayanan terkait kesopanan dan keramahan?</p>
+          <input type="radio" class="form-check-input" id="perilaku-tidak-sopan" name="p7_give"
+            value="Tidak sopan dan tidak ramah">
+          <label class="form-check-label" for="perilaku-tidak-sopan">Tidak sopan dan tidak ramah</label><br>
+
+          <input type="radio" class="form-check-input" id="perilaku-kurang-sopan" name="p7_give"
+            value="Kurang sopan dan kurang ramah">
+          <label class="form-check-label" for="perilaku-kurang-sopan">Kurang sopan dan kurang ramah</label><br>
+
+          <input type="radio" class="form-check-input" id="perilaku-sopan" name="p7_give" value="Sopan dan ramah">
+          <label class="form-check-label" for="perilaku-sopan">Sopan dan ramah</label><br>
+
+          <input type="radio" class="form-check-input" id="perilaku-sangat-sopan" name="p7_give"
+            value="Sangat sopan dan sangat ramah">
+          <label class="form-check-label" for="perilaku-sangat-sopan">Sangat sopan dan sangat ramah</label><br>
+
+          <br>
+          <p>8. Bagaimana pendapat Saudara tentang kualitas sarana dan prasarana?</p>
+          <input type="radio" class="form-check-input" id="kualitas-buruk" name="p8_give" value="Buruk">
+          <label class="form-check-label" for="kualitas-buruk">Buruk</label><br>
+
+          <input type="radio" class="form-check-input" id="kualitas-cukup" name="p8_give" value="Cukup">
+          <label class="form-check-label" for="kualitas-cukup">Cukup</label><br>
+
+          <input type="radio" class="form-check-input" id="kualitas-baik" name="p8_give" value="Baik">
+          <label class="form-check-label" for="kualitas-baik">Baik</label><br>
+
+          <input type="radio" class="form-check-input" id="kualitas-sangat-baik" name="p8_give" value="Sangat baik">
+          <label class="form-check-label" for="kualitas-sangat-baik">Sangat baik</label><br>
+
+          <br>
+          <p>9. Bagaimana pendapat Saudara tentang penanganan pengaduan pengguna layanan?</p>
+          <input type="radio" class="form-check-input" id="pengaduan-tidak-ada" name="p9_give" value="Tidak ada">
+          <label class="form-check-label" for="pengaduan-tidak-ada">Tidak ada</label><br>
+
+          <input type="radio" class="form-check-input" id="pengaduan-ada-tidak-berfungsi" name="p9_give"
+            value="Ada tetapi tidak berfungsi">
+          <label class="form-check-label" for="pengaduan-ada-tidak-berfungsi">Ada tetapi tidak berfungsi</label><br>
+
+          <input type="radio" class="form-check-input" id="pengaduan-berfungsi-kurang-maksimal" name="p9_give"
+            value="Berfungsi kurang maksimal">
+          <label class="form-check-label" for="pengaduan-berfungsi-kurang-maksimal">Berfungsi kurang
+            maksimal</label><br>
+
+          <input type="radio" class="form-check-input" id="pengaduan-dikelola-dengan-baik" name="p9_give"
+            value="Dikelola dengan baik">
+          <label class="form-check-label" for="pengaduan-dikelola-dengan-baik">Dikelola dengan baik</label><br>
+
+          <br>
+          <p>10. Bagaimana pendapat Saudara tentang tingkat kepuasan keseluruhan terhadap pelayanan yang diberikan</p>
+          <input type="radio" class="form-check-input" id="tidak-puas" name="p10_give" value="Tidak Puas">
+          <label class="form-check-label" for="tidak-puas">Tidak Puas</label><br>
+
+          <input type="radio" class="form-check-input" id="kurang-puas" name="p10_give" value="Kurang Puas">
+          <label class="form-check-label" for="kurang-puas">Kurang Puas</label><br>
+
+          <input type="radio" class="form-check-input" id="puas" name="p10_give" value="Puas">
+          <label class="form-check-label" for="puas">Puas</label><br>
+
+          <input type="radio" class="form-check-input" id="sangat-puas" name="p10_give" value="Sangat Puas">
+          <label class="form-check-label" for="sangat-puas">Sangat Puas</label><br>
+        </div> -->
+        <hr>
+        <h2 class="display-6 fw-bold">Kritik & Saran</h2>
+        <div class="mb-3">
+          <h5><strong>Kritik</strong></h5>
+          <textarea class="form-control" id="kritik" name="kritik" rows="4"></textarea>
+        </div>
+        <div class="mb-3">
+          <h5><strong>Saran</strong></h5>
+          <textarea class="form-control" id="saran" name="saran" rows="4"></textarea>
+        </div>
+        <button onclick="posting()" type="button" class="btn btn-primary mb-2">Save</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+
+
+<footer class="footer">
+  <div class="container">
+    <p>
+      <a href="/login" style="text-decoration: none; color: inherit;">© 2024</a> | Dinas Kependudukan dan Pencatatan
+      Sipil Kota Semarang
+    </p>
+  </div>
+</footer>
+
+</html>

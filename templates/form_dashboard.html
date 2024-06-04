@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet" />
+
+  <!-- Jquery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='crud-style.css') }}" />
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <title>
+    Survey Kepuasan Masyarakat Dinas Kependudukan dan Pencatatan Sipil Kota
+    Semarang
+  </title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+
+  <script>
+    $(document).ready(function () {
+      viewing();
+    });
+
+    function viewing() {
+      $.ajax({
+        type: "GET",
+        url: "/datadiri?sample_give=halo!",
+        data: {},
+        success: function (response) {
+          console.log(response);
+        },
+      });
+    }
+
+    function posting() {
+      // let nama = $('#nama').val();
+      let jenisKelamin = $('input[name="kelamin_give"]:checked').val();
+      let umur = $('input[name="usia_give"]:checked').val();
+      let pendidikan = $('input[name="pendidikan_give"]:checked').val();
+      let pekerjaan = $('input[name="pekerjaan_give"]:checked').val();
+      let pekerjaanLainnya = $("#pekerjaan-lainnya-input").val();
+      $.ajax({
+        type: "POST",
+        url: "/datadiri",
+        data: {
+          // nama_give : nama,
+          kelamin_give: jenisKelamin,
+          usia_give: umur,
+          pendidikan_give: pendidikan,
+          pekerjaan_give: pekerjaan,
+          pekerjaan_give: pekerjaanLainnya,
+        },
+        success: function (response) {
+          console.log(response);
+          $(".alert-success").show();
+          $(".alert-danger").hide();
+        },
+      });
+    }
+  </script>
+  <!-- Modal Pop Up untuk Detail -->
+  <script>
+    $(document).ready(function () {
+      // Menambahkan event listener untuk baris tabel
+      $("tr.data-row").click(function () {
+        // Ambil data dari baris yang diklik
+        var layanan = $(this).find("td:eq(1)").text();
+        var kritik = $(this).find("td:eq(2)").text();
+        var saran = $(this).find("td:eq(3)").text();
+
+        // tes
+        var usia = $(this).find(".d-none").data("usia");
+        var jenis_kelamin = $(this).find(".d-none").data("jenis_kelamin");
+        var pendidikan = $(this).find(".d-none").data("pendidikan");
+        var pekerjaan = $(this).find(".d-none").data("pekerjaan");
+        var skor = $(this).find(".d-none").data("skor");
+        var tanggal_dibuat = $(this).find(".d-none").data("waktu_dibuat");
+
+        // Menetapkan nilai data ke dalam modal
+        $("#modalContent").html(
+          "<p><strong>Jenis Layanan : </strong>" +
+          layanan +
+          "</p>" +
+          "<p><strong>Kritik <tab>: </strong>" +
+          kritik +
+          "</p>" +
+          "<p><strong>Saran: </strong>" +
+          saran +
+          "</p> <hr>" +
+          "<h5><strong>Biodata Responden</strong>" +
+          "</h5>" +
+          "<p><strong>Jenis Kelamin: </strong>" +
+          jenis_kelamin +
+          "</p>" +
+          "<p><strong>Usia: </strong>" +
+          usia +
+          "</p>" +
+          "<p><strong>Pendidikan: </strong>" +
+          pendidikan +
+          "</p>" +
+          "<p><strong>Pekerjaan: </strong>" +
+          pekerjaan +
+          "</p>" +
+          "<p><strong>Skor: </strong>" +
+          skor +
+          "/100" +
+          "</p>" +
+          "<p><strong>Tanggal dan Waktu Dibuat: </strong>" +
+          tanggal_dibuat +
+          "</p>"
+        );
+
+        // Tampilkan modal dengan efek fadeIn
+        $("#detailModal").fadeIn();
+      });
+
+      // Menutup modal saat tombol "Close" atau area di luar modal diklik
+      $(".close").click(function () {
+        $("#detailModal").css("display", "none");
+      });
+
+      $(window).click(function (event) {
+        if (event.target == $("#detailModal")[0]) {
+          $("#detailModal").fadeOut();
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div class="body-container">
+    <!-- ?Sidebar Section -->
+    <aside>
+      <!--  !Dark Mode & Profile (Jangan diapus) -->
+      <div class="right-section">
+        <!-- <div class="nav">
+        <button id="menu-btn">
+          <span class="material-icons-sharp">
+            menu
+          </span>
+        </button>
+        <div class="dark-mode">
+          <span class="material-icons-sharp active">
+            light_mode
+          </span>
+          <span class="material-icons-sharp">
+            dark_mode
+          </span>
+        </div>
+
+        <div class="profile">
+          <div class="info">
+            <p style="margin: 0;">Hey, <b>Reza</b></p>
+            <small class="text-muted">Admin</small>
+          </div>
+          <div class="profile-photo">
+            <img src="/static/images/profile-dummy.png">
+          </div>
+        </div>
+
+      </div> -->
+        <!-- End of Nav -->
+      </div>
+      <div class="sidebar">
+        <!-- <div class="toggle">
+          <div class="logo">
+            <img src="/static/images/LOGOCAPIL2.png" />
+            <h2><span class="primary">ADMIN</span></h2>
+          </div>
+          <div class="close" id="close-btn">
+            <span class="material-icons-sharp"> close </span>
+          </div>
+        </div> -->
+        <a href="{{ url_for('form') }}">
+          <span> <img src="/static/images/LOGOCAPIL2.png" alt="" style="width: 1.5rem;"> </span>
+          <h3 style="margin-top:4px; font-size: 1.3rem; font-weight: 600;">EDIT PAGE</h3>
+        </a>
+        <a href="{{ url_for('admin') }}">
+          <span class="material-icons-sharp">
+            dashboard
+          </span>
+          <h3>Dashboard</h3>
+        </a>
+        <a href="{{ url_for('statistik_dashboard') }}">
+          <span class="material-icons-sharp">
+            insights
+          </span>
+          <h3>Statistik</h3>
+        </a>
+        <a href="{{ url_for('form') }}" class="active">
+          <span class="material-icons-sharp">
+            receipt_long
+          </span>
+          <h3>Edit Form</h3>
+        </a>
+        <a href="{{ url_for('home') }}">
+          <span class="material-icons-sharp">
+            home
+          </span>
+          <h3>Home</h3>
+        </a>
+        <!-- <a href="#">
+        <span class="material-icons-sharp">
+          add
+        </span>
+        <h3>New Login</h3>
+      </a> -->
+        <a href="{{ url_for('sign_out') }}">
+          <span class="material-icons-sharp">
+            logout
+          </span>
+          <h3>Logout</h3>
+        </a>
+      </div>
+    </aside>
+
+    <!-- ?End of Sidebar Section -->
+    <div class="container">
+      <!-- ?Form CRUD -->
+      <div class="box-card">
+        <h2>Jenis Layanan</h2>
+        <form id="serviceForm">
+          <input type="text" name="service_name" placeholder="Masukkan Jenis Layanan" />
+          <button type="submit">Add</button>
+        </form>
+        <div id="message"></div>
+        <ul id="serviceList">
+          {% for service in services %}
+          <li>
+            <span class="serviceName">{{ service.name }}</span>
+            <button class="editBtn" data-id="{{ service._id }}">Edit</button>
+            <button class="deleteBtn" data-id="{{ service._id }}">
+              Delete
+            </button>
+            <form class="editForm" style="display: none">
+              <input type="text" name="edited_name" value="{{ service.name }}" />
+              <button type="submit">Save</button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- !Jenis Kelamin -->
+      <div class="box-card">
+        <h2>Jenis Kelamin</h2>
+        <form id="genderForm">
+          <input type="text" name="gender_name" placeholder="Masukkan Jenis Kelamin" />
+          <button type="submit">Add</button>
+        </form>
+        <div id="message-gender"></div>
+        <ul id="genderList">
+          {% for gender in genders %}
+          <li>
+            <span class="genderName">{{ gender.name }}</span>
+            <button class="editGenderBtn" data-id="{{ gender._id }}">
+              Edit
+            </button>
+            <button class="deleteGenderBtn" data-id="{{ gender._id }}">
+              Delete
+            </button>
+            <form class="editGenderForm" style="display: none">
+              <input type="text" name="edited_name" value="{{ gender.name }}" />
+              <button type="submit">Save</button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- !Usia -->
+      <div class="box-card">
+        <h2>Usia</h2>
+        <form id="ageForm">
+          <input type="text" name="age_range" placeholder="Masukkan Rentang Usia" />
+          <button type="submit">Add</button>
+        </form>
+        <div id="message-age"></div>
+        <ul id="ageList">
+          {% for age in ages %}
+          <li>
+            <span class="ageRange">{{ age.range }}</span>
+            <button class="editAgeBtn" data-id="{{ age._id }}">Edit</button>
+            <button class="deleteAgeBtn" data-id="{{ age._id }}">Delete</button>
+            <form class="editAgeForm" style="display: none">
+              <input type="text" name="edited_range" value="{{ age.range }}" />
+              <button type="submit">Save</button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- !Pendidikan -->
+      <div class="box-card">
+        <h2>Pendidikan</h2>
+        <form id="pendidikanForm">
+          <input type="text" name="pendidikan_name" placeholder="Masukkan Pendidikan" />
+          <button type="submit">Add</button>
+        </form>
+        <div id="message-pendidikan"></div>
+        <ul id="pendidikanList">
+          {% for pendidikan in pendidikans %}
+          <li>
+            <span class="pendidikanName">{{ pendidikan.name }}</span>
+            <button class="editPendidikanBtn" data-id="{{ pendidikan._id }}">
+              Edit
+            </button>
+            <button class="deletePendidikanBtn" data-id="{{ pendidikan._id }}">
+              Delete
+            </button>
+            <form class="editPendidikanForm" style="display: none">
+              <input type="text" name="edited_name" value="{{ pendidikan.name }}" />
+              <button type="submit">Save</button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- !Pekerjaan -->
+      <div class="box-card">
+        <h2>Pekerjaan</h2>
+        <form id="pekerjaanForm">
+          <input type="text" name="pekerjaan_name" placeholder="Masukkan Pekerjaan" />
+          <button type="submit">Add</button>
+        </form>
+        <div id="message-pekerjaan"></div>
+        <ul id="pekerjaanList">
+          {% for pekerjaan in pekerjaans %}
+          <li>
+            <span class="pekerjaanName">{{ pekerjaan.name }}</span>
+            <button class="editPekerjaanBtn" data-id="{{ pekerjaan._id }}">
+              Edit
+            </button>
+            <button class="deletePekerjaanBtn" data-id="{{ pekerjaan._id }}">
+              Delete
+            </button>
+            <form class="editPekerjaanForm" style="display: none">
+              <input type="text" name="edited_name" value="{{ pekerjaan.name }}" />
+              <button type="submit" class="savePekerjaanBtn" data-id="{{ pekerjaan._id }}">
+                Save
+              </button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <!-- Form untuk menambahkan pertanyaan -->
+      <div class="box-card">
+        <h2>Form Pertanyaan</h2>
+        <form id="question-form">
+          <div class="form-group">
+            <label for="pertanyaan">Pertanyaan:</label>
+            <input type="text" class="form-control" id="pertanyaan" name="pertanyaan">
+          </div>
+          <div class="form-group">
+            <label for="pilihan1">Pilihan 1 (10 Poin):</label>
+            <input type="text" class="form-control" id="pilihan1" name="pilihan1" value="Sangat Sesuai" data-value="10">
+          </div>
+          <div class="form-group">
+            <label for="pilihan2">Pilihan 2 (7.5 Poin):</label>
+            <input type="text" class="form-control" id="pilihan2" name="pilihan2" value="Sesuai" data-value="7.5">
+          </div>
+          <div class="form-group">
+            <label for="pilihan3">Pilihan 3 (5 Poin):</label>
+            <input type="text" class="form-control" id="pilihan3" name="pilihan3" value="Kurang Sesuai" data-value="5">
+          </div>
+          <div class="form-group">
+            <label for="pilihan4">Pilihan 4 (2.5 Poin):</label>
+            <input type="text" class="form-control" id="pilihan4" name="pilihan4" value="Tidak Sesuai" data-value="2.5">
+          </div>
+          <button type="submit" class="btn btn-primary">Tambah Pertanyaan</button>
+        </form>
+      </div>
+      <!-- List Pertanyaan -->
+      <div class="box-card fixed-width container-fluid">
+        <h2>List Pertanyaan</h2>
+        <div class="list-pertanyaan" style="margin-top: 0.5rem;">
+          <ul id="questionList" class="list-unstyled">
+            {% for pertanyaan in pertanyaan %}
+            <li class="question" data-id="{{ pertanyaan._id }}">
+              <strong>Pertanyaan:</strong> <span class="question-text">{{ pertanyaan.pertanyaan }}</span><br>
+              <!-- <strong>Nilai:</strong> <span class="nilai">{{ pertanyaan.nilai }}</span><br> -->
+              <strong>Pilihan:</strong>
+              <ul class="list-unstyled">
+                <li><span class="pilihan">{{ pertanyaan.pilihan1 }}</span> ({{ pertanyaan.nilai_pilihan1 }})</li>
+                <li><span class="pilihan">{{ pertanyaan.pilihan2 }}</span> ({{ pertanyaan.nilai_pilihan2 }})</li>
+                <li><span class="pilihan">{{ pertanyaan.pilihan3 }}</span> ({{ pertanyaan.nilai_pilihan3 }})</li>
+                <li><span class="pilihan">{{ pertanyaan.pilihan4 }}</span> ({{ pertanyaan.nilai_pilihan4 }})</li>
+              </ul>
+              <button class="btn btn-primary editQuestionBtn" data-toggle="modal"
+                data-target="#editQuestionModal{{ loop.index }}" data-id="{{ pertanyaan._id }}">Edit</button>
+              <button class="btn btn-danger deleteQuestionBtn">Hapus</button>
+            </li>
+            <!-- Modal untuk mengedit pertanyaan -->
+            <div class="modal fade" id="editQuestionModal{{ loop.index }}" tabindex="-1" role="dialog"
+              aria-labelledby="editQuestionModalLabel{{ loop.index }}" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editQuestionModalLabel">Edit Pertanyaan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Form untuk mengedit pertanyaan -->
+                    <form class="editQuestionForm">
+                      <!-- <input type="hidden" name="question_id"> -->
+                      <input type="hidden" name="question_id" value="{{ pertanyaan._id }}">
+                      <div class="form-group">
+                        <label for="editedQuestionText">Pertanyaan</label>
+                        <input type="textarea" class="form-control editedQuestionText" name="edited_question"
+                          value="{{ pertanyaan.pertanyaan }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="editedOption1">Pilihan 1</label>
+                        <input type="text" class="form-control" name="edited_option1" value="{{ pertanyaan.pilihan1 }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="editedOption2">Pilihan 2</label>
+                        <input type="text" class="form-control" name="edited_option2" value="{{ pertanyaan.pilihan2 }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="editedOption3">Pilihan 3</label>
+                        <input type="text" class="form-control" name="edited_option3" value="{{ pertanyaan.pilihan3 }}">
+                      </div>
+                      <div class="form-group">
+                        <label for="editedOption4">Pilihan 4</label>
+                        <input type="text" class="form-control" name="edited_option4" value="{{ pertanyaan.pilihan4 }}">
+                      </div>
+                      <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Fungsi untuk edit Pertanyaan -->
+<script>
+  // Fungsi untuk menambahkan pertanyaan
+  $('#question-form').submit(function (event) {
+    event.preventDefault();
+    var pertanyaan = $('#pertanyaan').val();
+    var pilihan1 = $('#pilihan1').val(); // Ambil nilai teks dari pilihan 1
+    var pilihan2 = $('#pilihan2').val(); // Ambil nilai teks dari pilihan 2
+    var pilihan3 = $('#pilihan3').val(); // Ambil nilai teks dari pilihan 3
+    var pilihan4 = $('#pilihan4').val(); // Ambil nilai teks dari pilihan 4
+    var nilai_pilihan1 = $('#pilihan1').attr('data-value'); // Ambil nilai numerik dari pilihan 1
+    var nilai_pilihan2 = $('#pilihan2').attr('data-value'); // Ambil nilai numerik dari pilihan 2
+    var nilai_pilihan3 = $('#pilihan3').attr('data-value'); // Ambil nilai numerik dari pilihan 3
+    var nilai_pilihan4 = $('#pilihan4').attr('data-value'); // Ambil nilai numerik dari pilihan 4
+    $.ajax({
+      type: 'POST',
+      url: '/add_question',
+      data: {
+        pertanyaan: pertanyaan,
+        nilai: Math.max(nilai_pilihan1, nilai_pilihan2, nilai_pilihan3, nilai_pilihan4), // Ambil nilai maksimum dari semua pilihan
+        pilihan1: pilihan1, // Kirim nilai teks pilihan 1
+        pilihan2: pilihan2, // Kirim nilai teks pilihan 2
+        pilihan3: pilihan3, // Kirim nilai teks pilihan 3
+        pilihan4: pilihan4, // Kirim nilai teks pilihan 4
+        nilai_pilihan1: parseFloat(nilai_pilihan1), // Kirim nilai numerik pilihan 1
+        nilai_pilihan2: parseFloat(nilai_pilihan2), // Kirim nilai numerik pilihan 2
+        nilai_pilihan3: parseFloat(nilai_pilihan3), // Kirim nilai numerik pilihan 3
+        nilai_pilihan4: parseFloat(nilai_pilihan4) // Kirim nilai numerik pilihan 4
+      },
+      success: function (response) {
+        alert(response.message);
+        window.location.reload(); // Muat ulang halaman setelah menambahkan pertanyaan
+      }
+    });
+  });
+
+
+  // Fungsi untuk menghapus pertanyaan
+  $('#questionList').on('click', '.deleteQuestionBtn', function () {
+    var questionId = $(this).closest('.question').data('id'); // Ubah cara mendapatkan ID
+    $.ajax({
+      type: 'POST',
+      url: '/delete_question',
+      data: { question_id: questionId },
+      success: function (response) {
+        alert(response.message);
+        window.location.reload(); // Muat ulang halaman setelah menghapus pertanyaan
+      }
+    });
+  });
+
+
+  // Menangani submit form edit untuk pertanyaan
+  $('.editQuestionForm').submit(function (event) {
+    event.preventDefault();
+    var questionId = $(this).find('input[name="question_id"]').val();
+    var editedQuestion = $(this).find('.editedQuestionText').val();
+    var editedOption1 = $(this).find('input[name="edited_option1"]').val();
+    var editedOption2 = $(this).find('input[name="edited_option2"]').val();
+    var editedOption3 = $(this).find('input[name="edited_option3"]').val();
+    var editedOption4 = $(this).find('input[name="edited_option4"]').val();
+
+    $.ajax({
+      type: 'POST',
+      url: '/edit_question',
+      data: {
+        question_id: questionId,
+        edited_question: editedQuestion,
+        edited_option1: editedOption1,
+        edited_option2: editedOption2,
+        edited_option3: editedOption3,
+        edited_option4: editedOption4
+      },
+      success: function (response) {
+        alert(response.message);
+        location.reload(); // Memuat ulang halaman setelah berhasil mengedit pertanyaan
+      },
+      error: function (xhr, status, error) {
+        console.log(xhr);
+        console.log(status);
+        console.log(error);
+        alert('Error occurred while editing question.');
+      }
+    });
+  });
+
+</script>
+<!-- Script of origin JS -->
+<script>
+  const sideMenu = document.querySelector("aside");
+  const menuBtn = document.getElementById("menu-btn");
+  const closeBtn = document.getElementById("close-btn");
+
+  const darkMode = document.querySelector(".dark-mode");
+
+  menuBtn.addEventListener("click", () => {
+    sideMenu.style.display = "block";
+  });
+
+  closeBtn.addEventListener("click", () => {
+    sideMenu.style.display = "none";
+  });
+
+  darkMode.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode-variables");
+    darkMode.querySelector("span:nth-child(1)").classList.toggle("active");
+    darkMode.querySelector("span:nth-child(2)").classList.toggle("active");
+  });
+
+  Orders.forEach((order) => {
+    const tr = document.createElement("tr");
+    const trContent = `
+      <td>${order.productName}</td>
+      <td>${order.productNumber}</td>
+      <td>${order.paymentStatus}</td>
+      <td class="${order.status === "Declined"
+        ? "danger"
+        : order.status === "Pending"
+          ? "warning"
+          : "primary"
+      }">${order.status}</td>
+      <td class="primary">Details</td>
+  `;
+    tr.innerHTML = trContent;
+    document.querySelector("table tbody").appendChild(tr);
+  });
+  // End of origin JS
+</script>
+<!-- Script of active sidebar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Mengambil semua tautan di dalam sidebar
+    const sidebarLinks = document.querySelectorAll(".sidebar a");
+
+    // Menambahkan event listener untuk setiap tautan
+    sidebarLinks.forEach(function (link) {
+      link.addEventListener("click", function () {
+        // Menghapus kelas active dari semua tautan
+        sidebarLinks.forEach(function (item) {
+          item.classList.remove("active");
+        });
+
+        // Menambahkan kelas active ke tautan yang diklik
+        this.classList.add("active");
+      });
+    });
+  });
+</script>
+
+</html>

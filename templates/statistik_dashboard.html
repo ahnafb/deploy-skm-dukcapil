@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+  <!-- Jquery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style-admin.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <title>Survey Kepuasan Masyarakat Dinas Kependudukan dan Pencatatan Sipil Kota Semarang</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <style>
+    .chart-container {
+      width: 100%;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    .chart-grid-container {
+      display: grid;
+      grid-template-columns: auto auto auto auto;
+      gap: 20px;
+      justify-items: center;
+      align-items: center;
+    }
+
+    canvas {
+      max-width: 100%;
+      margin: 10px 0;
+    }
+
+    h1,
+    h2 {
+      color: #333;
+    }
+  </style>
+
+</head>
+
+<body>
+  <aside>
+    <div class="sidebar">
+      <a href="{{ url_for('statistik_dashboard') }}">
+        <span> <img src="/static/images/LOGOCAPIL2.png" alt="" style="width: 1.5rem;"> </span>
+        <h3 style="margin-top:4px; font-size: 1.3rem; font-weight: 600;">STATS PAGE</h3>
+      </a>
+      <a href="{{ url_for('admin') }}">
+        <span class="material-icons-sharp">
+          dashboard
+        </span>
+        <h3>Dashboard</h3>
+      </a>
+      <a href="{{ url_for('statistik_dashboard') }}" class="active">
+        <span class="material-icons-sharp">
+          insights
+        </span>
+        <h3>Statistik</h3>
+      </a>
+      <a href="{{ url_for('form') }}">
+        <span class="material-icons-sharp">
+          receipt_long
+        </span>
+        <h3>Edit Form</h3>
+      </a>
+      <a href="{{ url_for('home') }}">
+        <span class="material-icons-sharp">
+          home
+        </span>
+        <h3>Home</h3>
+      </a>
+      <!-- <a href="#">
+        <span class="material-icons-sharp">
+          add
+        </span>
+        <h3>New Login</h3>
+      </a> -->
+      <a href="{{ url_for('sign_out') }}">
+        <span class="material-icons-sharp">
+          logout
+        </span>
+        <h3>Logout</h3>
+      </a>
+
+    </div>
+  </aside>
+  <div class="chart-container">
+    <h1>Statistik Dashboard</h1>
+    <div class="chart-grid-container">
+      <div>
+        <h2>Jenis Kelamin</h2>
+        <canvas id="genderChart"></canvas>
+      </div>
+      <div>
+        <h2>Jenis Layanan</h2>
+        <canvas id="serviceChart" style="width: 50rem;"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Data jenis kelamin dari Flask (dikonversi ke JSON)
+        const jenisKelaminData = {{ jenis_kelamin_count|tojson }};
+        // Data jenis layanan dari Flask (dikonversi ke JSON)
+        const layananData = {{ layanan_count|tojson }};
+
+        // Data untuk Chart.js (Jenis Kelamin)
+        const genderLabels = Object.keys(jenisKelaminData);
+        const genderValues = Object.values(jenisKelaminData);
+
+        // Data untuk Chart.js (Jenis Layanan)
+        const serviceLabels = Object.keys(layananData);
+        const serviceValues = Object.values(layananData);
+
+        // Chart untuk Jenis Kelamin
+        const genderCtx = document.getElementById('genderChart').getContext('2d');
+        const genderChart = new Chart(genderCtx, {
+            type: 'pie',
+            data: {
+                labels: genderLabels,
+                datasets: [{
+                    label: 'Jenis Kelamin',
+                    data: genderValues,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart untuk Jenis Layanan
+        const serviceCtx = document.getElementById('serviceChart').getContext('2d');
+        const serviceChart = new Chart(serviceCtx, {
+            type: 'bar',
+            data: {
+                labels: serviceLabels,
+                datasets: [{
+                    label: 'Jenis Layanan',
+                    data: serviceValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+<!-- HTML -->
+
+
+<!-- Script of origin JS -->
+<script>
+  const sideMenu = document.querySelector('aside');
+  const menuBtn = document.getElementById('menu-btn');
+  const closeBtn = document.getElementById('close-btn');
+
+  const darkMode = document.querySelector('.dark-mode');
+
+  menuBtn.addEventListener('click', () => {
+    sideMenu.style.display = 'block';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    sideMenu.style.display = 'none';
+  });
+
+  darkMode.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode-variables');
+    darkMode.querySelector('span:nth-child(1)').classList.toggle('active');
+    darkMode.querySelector('span:nth-child(2)').classList.toggle('active');
+  })
+
+
+  Orders.forEach(order => {
+    const tr = document.createElement('tr');
+    const trContent = `
+      <td>${order.productName}</td>
+      <td>${order.productNumber}</td>
+      <td>${order.paymentStatus}</td>
+      <td class="${order.status === 'Declined' ? 'danger' : order.status === 'Pending' ? 'warning' : 'primary'}">${order.status}</td>
+      <td class="primary">Details</td>
+  `;
+    tr.innerHTML = trContent;
+    document.querySelector('table tbody').appendChild(tr);
+  });
+  // End of origin JS
+</script>
+<!-- Script of active sidebar -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Mengambil semua tautan di dalam sidebar
+    const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+    // Menambahkan event listener untuk setiap tautan
+    sidebarLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        // Menghapus kelas active dari semua tautan
+        sidebarLinks.forEach(function (item) {
+          item.classList.remove('active');
+        });
+
+        // Menambahkan kelas active ke tautan yang diklik
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
+
+</html>

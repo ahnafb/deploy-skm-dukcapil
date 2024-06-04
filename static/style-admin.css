@@ -1,0 +1,454 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --color-primary: #6C9BCF;
+  --color-danger: #FF0060;
+  --color-success: #1B9C85;
+  --color-warning: #F7D060;
+  --color-white: #fff;
+  --color-info-dark: #7d8da1;
+  --color-dark: #363949;
+  --color-light: rgba(132, 139, 200, 0.18);
+  --color-dark-variant: #677483;
+  --color-background: #f6f6f9;
+
+  --card-border-radius: 2rem;
+  --border-radius-1: 0.4rem;
+  --border-radius-2: 1.2rem;
+
+  --card-padding: 1.8rem;
+  --padding-1: 1.2rem;
+
+  --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+.dark-mode-variables {
+  --color-background: #181a1e;
+  --color-white: #202528;
+  --color-dark: #edeffd;
+  --color-dark-variant: #a3bdcc;
+  --color-light: rgba(0, 0, 0, 0.4);
+  --box-shadow: 0 2rem 3rem var(--color-light);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  appearance: 0;
+  border: 0;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 15px;
+}
+
+body {
+  display: grid;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem;
+  user-select: none;
+  overflow-x: hidden;
+  color: var(--color-dark);
+  background-color: var(--color-background);
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  /* Retain if horizontal centering is needed */
+  gap: 1.8rem;
+  grid-template-columns: 15rem auto;
+}
+
+a {
+  color: var(--color-dark);
+}
+
+img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 1.8rem;
+}
+
+h2 {
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+h3 {
+  font-weight: 500;
+  font-size: 0.87rem;
+}
+
+small {
+  font-size: 0.76rem;
+}
+
+p {
+  color: var(--color-dark-variant);
+}
+
+b {
+  color: var(--color-dark);
+}
+
+.text-muted {
+  color: var(--color-info-dark);
+}
+
+.primary {
+  color: var(--color-primary);
+}
+
+.danger {
+  color: var(--color-danger);
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.warning {
+  color: var(--color-warning);
+}
+
+.container {
+  justify-items: center;
+  /* Center items horizontally */
+  align-items: flex-end;
+  /* Align items to the bottom */
+}
+
+.home-section {
+  margin-top: 1rem;
+}
+
+aside {
+  margin-top: 1.3rem;
+  padding-left: 4.5vh;
+  width: auto;
+  height: 100vh;
+}
+
+aside .toggle {
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+aside .toggle .logo {
+  margin-top: 13px;
+  margin-left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+aside .toggle .logo img {
+  width: 2rem;
+  height: max-content;
+}
+
+aside .toggle .close {
+  padding-right: 1rem;
+  display: none;
+}
+
+aside .sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  box-shadow: var(--box-shadow);
+  border-radius: 15px;
+  height: 88vh;
+  position: relative;
+  transition: all 0.3s ease;
+  min-width: 5rem;
+  /* Lebar minimum sidebar */
+  max-width: 15rem;
+  /* Lebar maksimum sidebar */
+}
+
+aside .sidebar:hover {
+  box-shadow: none;
+}
+
+aside .sidebar a {
+  display: flex;
+  align-items: center;
+  color: var(--color-primary);
+  height: 3.7rem;
+  gap: 1rem;
+  position: relative;
+  margin-left: 2rem;
+  transition: all 0.3s ease;
+}
+
+/* Tambahan untuk efek hover pada sidebar yang diperkecil */
+aside .sidebar:hover {
+  min-width: 15rem;
+  /* Lebar saat hover */
+}
+
+aside .sidebar a span {
+  font-size: 1.6rem;
+  transition: all 0.3s ease;
+}
+
+aside .sidebar a:last-child {
+  position: absolute;
+  bottom: 2rem;
+  width: 100%;
+}
+
+aside .sidebar a.active {
+  width: 100%;
+  color: var(--color-primary);
+  background-color: var(--color-light);
+  margin-left: 0;
+  border-radius: 14px;
+}
+
+aside .sidebar a.active::before {
+  content: '';
+  width: 6px;
+  height: 18px;
+  background-color: var(--color-primary);
+}
+
+aside .sidebar a.active span {
+  color: var(--color-primary);
+  margin-left: calc(1rem - 3px);
+}
+
+aside .sidebar a:hover {
+  color: var(--color-primary);
+}
+
+aside .sidebar a:hover span {
+  margin-left: 0.6rem;
+}
+
+aside .sidebar .message-count {
+  background-color: var(--color-primary);
+  padding: 2px 6px;
+  color: var(--color-white);
+  font-size: 11px;
+  border-radius: var(--border-radius-1);
+}
+
+/* !Show data CSS */
+/* !Show Table Data */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #607274;
+  border-radius: 4px;
+}
+
+td {
+  /* border: none; */
+  border: 1px solid #717272a2;
+  text-align: justify;
+  vertical-align: top;
+  padding: 0px 15px 25px 5px;
+  font-weight: 400;
+}
+
+.detail-cell {
+  text-align: center;
+  cursor: pointer;
+  color: var(--color-primary);
+  padding: 0px 20px 0px 20px;
+}
+
+td.detail-cell:hover {
+  color: var(--color-dark-variant);
+  /* Warna teks saat hover */
+  text-decoration: underline;
+  /* Garis bawah pada teks saat hover */
+}
+
+th {
+  border: 1px solid #717272a2;
+  text-align: center;
+  padding: 6px;
+  color: #f5f3f3;
+  background-color: var(--color-primary);
+  font-weight: 500;
+}
+
+.tampil-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5vh auto;
+  width: 92%;
+  border: 1px solid black;
+  padding-inline: 2.5vh;
+}
+
+/* * Pagination * */
+.pagination {
+  display: flex;
+  justify-content: center;
+  /* Mengatur tombol di tengah */
+  list-style: none;
+  /* Menghilangkan tanda bullet */
+  padding: 0;
+  margin-top: 15px;
+}
+
+.page-item {
+  display: inline-block;
+}
+
+.page-link {
+  text-decoration: none;
+  color: black;
+  padding: 5px 10px;
+  /* Mengatur padding untuk membuat tombol terlihat lebih besar */
+  border: 1px solid #ccc;
+  /* Menambahkan border */
+}
+
+.page-link:hover {
+  background-color: var(--color-primary);
+  color: black;
+  border-color: var(--color-primary);
+}
+
+.page-item.active .page-link {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Filter Jenis Layanan */
+.filter-container {
+  margin-bottom: 15px;
+}
+
+.filter-container select {
+  padding: 8px 11.5px;
+  border-radius: 5px;
+  border: 1.3px solid #000;
+  outline: none;
+  cursor: pointer;
+}
+
+.filter-container select:focus {
+  border: 1px solid #007bff;
+}
+
+/* Close button */
+.close {
+  color: #aaa;
+  float: right;
+  /* Tempatkan tombol close di kanan */
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #ff3232;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* * Modal Pop Up Detail * */
+/* Animasi pop-up modal */
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-detail {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  /* Posisi vertikal di tengah layar */
+  left: 0;
+  /* Posisi horizontal di tengah layar */
+  width: 100%;
+  /* Atur lebar modal sesuai kebutuhan Anda */
+  height: 100%;
+  /* Atur tinggi modal sesuai kebutuhan Anda */
+  overflow: hidden;
+  /* Sembunyikan overflow agar tidak ada scroll */
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Konten modal */
+.modal-detail-content {
+  animation: slideInFromBottom 0.3s ease-in-out forwards;
+  /* Gunakan animasi slideInFromBottom dengan durasi 0.3 detik */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  margin-top: 80px;
+  border-radius: 7px;
+}
+
+.text {
+  font-weight: bold;
+  font-size: x-large;
+  margin-left: 12px;
+  /* margin-bottom: 3px; */
+}
+
+/* !!Flatpckr */
+.flatpickr-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.flatpickr-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.flatpickr-input {
+  padding: 12px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  width: 150px;
+  /* Menetapkan lebar tetap */
+}
+
+.submit-button {
+  padding: 12px 28px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #86b6ed;
+}

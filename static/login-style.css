@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.section {
+    padding: 1rem 1.5rem;
+    max-width: 750px;
+    margin: auto;
+}
+
+.box {
+    border: #e8344e 1px solid;
+    /* Warna dan ketebalan border */
+    box-shadow: 0px 0px 10px rgba(232, 52, 78, 0.5);
+    /* Efek bayangan */
+}
+
+.is-sparta {
+    color: #e8344e !important;
+}
+
+.button.is-sparta {
+    background-color: #e8344e;
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.button.is-sparta.is-outlined {
+    background-color: transparent;
+    border-color: #e8344e;
+    color: #e8344e !important;
+}
+
+.help {
+    color: gray;
+}
+
+.image-logo-login {
+    display: flex;
+    width: 100%;
+}
+
+.image-login {
+    width: 8rem;
+    padding: 15px 20px;
+    margin-bottom: 18px;
+}
+
+.logo-login {
+    font-size: larger;
+    color: #000;
+    margin: 8px 8px;
+}
+
+#input-password,
+#input-username,
+#input-password2 {
+    border: #e8344e 1px solid;
+}
+
+#input-password::placeholder,
+#input-username::placeholder,
+#input-password2::placeholder {
+    color: #858585;
+}
