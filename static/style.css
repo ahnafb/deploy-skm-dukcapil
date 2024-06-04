@@ -329,3 +329,22 @@ li {
   margin: 0;
   padding: 0;
 }
+
+/* Media Query untuk layar kecil (mobile) */
+@media (max-width: 768px) {
+  .top-image {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .top-image img {
+    max-width: 90%;
+    margin-inline: 5vh;
+    margin: 10px 0;
+  }
+
+  .top-image img:nth-child(2),
+  .top-image img:nth-child(3) {
+    display: none; /* Menyembunyikan gambar kedua dan ketiga pada layar kecil */
+  }
+}
