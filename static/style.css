@@ -25,12 +25,10 @@ body {
       rgba(210, 55, 55, 1) 47%,
       rgba(255, 85, 85, 1) 100%);
   transition: top 0.5s ease;
-  /* Efek transisi perlahan */
 }
 
 .top-image.closed {
   top: -120px;
-  /* Menyembunyikan elemen saat ditutup */
 }
 
 .top-image img {
@@ -42,7 +40,6 @@ body {
 
 .top-image img:nth-child(1) {
   margin-right: auto;
-  /* Menggeser gambar ke kiri */
 }
 
 .top-image img:nth-child(2) {
@@ -51,7 +48,6 @@ body {
 
 .top-image img:nth-child(3) {
   margin-right: auto;
-  /* Menggeser gambar ke kanan */
 }
 
 .judul-survey {
@@ -121,7 +117,6 @@ p {
   justify-content: center;
   align-items: center;
   border-bottom: blur 1px #080808;
-  /* box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1); */
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   padding-top: 17px;
@@ -135,7 +130,6 @@ p {
   list-style: none;
   display: flex;
   gap: 30px;
-  /* Mengurangi jarak antara elemen navbar */
   margin-right: 10vh;
 }
 
@@ -151,9 +145,7 @@ p {
 
 #skor-container {
   text-align: center;
-  /* background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-
   color: white;
   border-radius: 10px;
   padding: 20px;
@@ -234,13 +226,11 @@ p {
 
 .btn-success {
   margin-top: 10px;
-  /* Jarak antara card dan tombol */
   margin-left: 80vh;
 }
 
 /* Modal untuk Apakah Anda Sudah Yakin? */
 .modal {
-  /* display: none; */
   position: fixed;
   z-index: 1;
   left: 0;
@@ -271,18 +261,15 @@ p {
   text-align: center;
   border-radius: 5px;
   transition: background-color 0.3s;
-  /* Smooth transition for background color */
 }
 
-/* Hover effect */
 .modal-content button:hover {
   background-color: #080808;
-  /* Change background color on hover */
   color: white;
 }
 
 /* * Kritik Saran * */
-/* Gaya untuk kotak input kritik dan saran */
+/* CSS untuk kotak input kritik dan saran */
 #kritik,
 #saran {
   width: 100%;
@@ -296,7 +283,6 @@ p {
 .close {
   color: #aaa;
   float: right;
-  /* Tempatkan tombol close di kanan */
   font-size: 28px;
   font-weight: bold;
 }
@@ -345,6 +331,17 @@ li {
 
   .top-image img:nth-child(2),
   .top-image img:nth-child(3) {
-    display: none; /* Menyembunyikan gambar kedua dan ketiga pada layar kecil */
+    display: none;
+    /* Menyembunyikan gambar kedua dan ketiga pada layar kecil */
+  }
+
+  .modal-content {
+    width: 80%;
+    padding: 20px;
+    margin: 40% auto;
+  }
+
+  .modal-content button {
+    width: 60%;
   }
 }
